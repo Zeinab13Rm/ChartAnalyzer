@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Application Service (FastAPI)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount your local 'src' directory to the '/app' directory in the container
+      - ./chart_analyzer/src:/app
+    depends_on:
+      - db
+    environment:
+      # The hostname 'db' is resolved by Docker's internal networking
+      - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/ChartAnalyzer
+      - JWT_SECRET=a_very_secret_key
+      - JWT_ALGORITHM=HS256
+      - JWT_EXPIRE_MINUTES=30
+    # Overriding the CMD to enable --reload for development
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Database Service (SQL Server)
+  db:
+    image: postgres:13-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "ChartAnalyzer"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  # Named volume to persist database data across container restarts
+  postgres_data:

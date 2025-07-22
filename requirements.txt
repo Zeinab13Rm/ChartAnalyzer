@@ -1,0 +1,19 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Database and ORM
+sqlalchemy
+pydantic_settings
+alembic
+
+# PostgreSQL Driver
+psycopg2-binary
+asyncpg
+
+# Authentication
+passlib[bcrypt]
+python-jose[cryptography]
+
+# Other
+python-multipart
