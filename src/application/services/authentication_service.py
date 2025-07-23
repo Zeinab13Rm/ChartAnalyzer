@@ -2,15 +2,15 @@
 from datetime import datetime, timezone, timedelta
 from jose import jwt
 from passlib.context import CryptContext
-from domain.ports import UserRepositoryPort 
-from domain.entities.user import User
+from src.domain.ports.repositories.user_repository import UserRepositoryPort
+from src.domain.entities.user import User
 import uuid
-from application.ports import AuthServicePort
-from application.dtos.authentication import (
-    RegisterRequest,
-    LoginRequest,
-    UserResponse,
-    TokenResponse
+from src.application.ports.authentication_service_port import AuthServicePort
+from src.application.dtos.authentication import (
+    RegisterRequestDTO,
+    LoginRequestDTO,
+    UserResponseDTO,
+    TokenResponseDTO
 )
 
 class AuthService(AuthServicePort):
@@ -27,27 +27,24 @@ class AuthService(AuthServicePort):
         self._expires_minutes = expires_minutes
         self._pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-    async def register(self, request: RegisterRequest) -> UserResponse:
-        if await self._user_repo.get_by_email(request.email):
+    async def register(self, email, password) -> User:
+        if await self._user_repo.get_by_email(email):
             raise ValueError("Email already registered")
         
         user = User(
             id=str(uuid.uuid4()),
-            email=request.email,
-            password_hash=self._hash_password(request.password)
+            email=email,
+            password_hash=self._hash_password(password)
         )
         await self._user_repo.create_user(user)
-        return self._user_to_dto(user)
+        return user
 
-    async def login(self, request: LoginRequest) -> TokenResponse:
-        user = await self._user_repo.get_by_email(request.email)
-        if not user or not self._verify_password(request.password, user.password_hash):
+    async def login(self, email, password) -> str:
+        user = await self._user_repo.get_by_email(email)
+        if not user or not self._verify_password(password, user.password_hash):
             raise ValueError("Invalid credentials")
         
-        return TokenResponse(
-            access_token=self._create_access_token(user.email),
-            token_type="bearer"
-        )
+        return self._create_access_token(user.email)
 
     def _hash_password(self, password: str) -> str:
         return self._pwd_context.hash(password)
@@ -63,8 +60,8 @@ class AuthService(AuthServicePort):
             algorithm=self._algorithm
         )
 
-    def _user_to_dto(self, user: User) -> UserResponse:
-        return UserResponse(
+    def _user_to_dto(self, user: User) -> UserResponseDTO:
+        return UserResponseDTO(
             id=user.id,
             email=user.email,
             is_active=user.is_active

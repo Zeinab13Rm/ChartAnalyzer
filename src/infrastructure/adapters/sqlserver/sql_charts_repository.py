@@ -1,17 +1,13 @@
 from sqlalchemy import create_engine
-from domain.ports import ChartsRepositoryPort
-from domain.entities import ChartImage
+from src.domain.ports.repositories.charts_repository import ChartsRepositoryPort
+from src.domain.entities.chart_image import ChartImage
+from sqlalchemy.orm import Session
 
 class SqlChartsRepository(ChartsRepositoryPort):
-    def __init__(self, connection_string: str):
-        self._engine = create_engine(connection_string)
+    def __init__(self, session: Session):
+        self._session = session
 
     def save(self, image: ChartImage) -> str:
-        with self._engine.connect() as conn:
-            conn.execute(
-                "INSERT INTO Charts (Id, UserId, ImageData, UploadedAt) "
-                "VALUES (?, ?, ?, ?)",
-                (image.id, image.user_id, image.image_data, image.uploaded_at)
-            )
-            conn.commit()
-        return image.id  # Return the ID instead of a file path
+        self._session.add(image)
+        self._session.commit()
+        return image.id

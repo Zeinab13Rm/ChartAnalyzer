@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
-from domain.ports import AnalysisRepositoryPort
-from domain.entities import ChartAnalysis, ChartImage
+from src.domain.ports import AnalysisRepositoryPort
+from src.domain.entities import ChartAnalysis, ChartImage
 class SqlAnalysisRepository(AnalysisRepositoryPort):
     def __init__(self, connection_string: str):
         self._engine = create_engine(connection_string)

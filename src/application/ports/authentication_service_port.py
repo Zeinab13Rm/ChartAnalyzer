@@ -1,19 +1,16 @@
 
 from abc import ABC, abstractmethod
-from domain.entities.user import User
-from application.dtos.authentication import (
-    RegisterRequest,
-    LoginRequest,
-    UserResponse,
-    TokenResponse
+from src.domain.entities.user import User
+from src.application.dtos.authentication import (
+    RegisterRequestDTO,
+    LoginRequestDTO,
+    UserResponseDTO,
+    TokenResponseDTO
 )
 
-
-# src/domain/ports/auth_service.py
 class AuthServicePort(ABC):
     @abstractmethod
-    async def register(self, request: RegisterRequest) -> UserResponse: ...
+    async def register(self, email, password) -> User: ...
     
     @abstractmethod
-    async def login(self, request: LoginRequest) -> TokenResponse:  # Returns JWT
-        ...
+    async def login(self, email, password) -> str: ...

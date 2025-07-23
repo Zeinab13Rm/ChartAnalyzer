@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from domain.entities import ChartAnalysis
+from src.domain.entities import ChartAnalysis
 
 class AnalysisRepositoryPort(ABC):
     @abstractmethod

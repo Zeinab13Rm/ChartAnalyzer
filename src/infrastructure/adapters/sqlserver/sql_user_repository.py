@@ -1,7 +1,7 @@
 # src/infrastructure/adapters/sql_user_repository.py
 from sqlalchemy import select
-from domain.ports import UserRepositoryPort
-from domain.entities.user import User
+from src.domain.ports import UserRepositoryPort
+from src.domain.entities.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import EmailStr
 

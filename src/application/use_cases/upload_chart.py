@@ -1,5 +1,5 @@
-from domain.entities import ChartImage
-from domain.ports import ChartsRepositoryPort
+from src.domain.entities.chart_image import ChartImage
+from src.domain.ports.repositories.charts_repository import ChartsRepositoryPort
 import uuid
 
 class UploadChartUseCase:
@@ -12,4 +12,5 @@ class UploadChartUseCase:
             user_id=user_id,
             image_data=image_bytes
         )
-        return self._image_repo.save(chart_image)  # Returns image ID
+        self._image_repo.save(chart_image)
+        return chart_image.id
