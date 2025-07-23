@@ -1,6 +1,6 @@
 # application/services/llm_service.py
-from application.dtos.LLM import LLMRequestDTO, LLMResponseDTO
-from application.dtos.error import LLMErrorDTO
+from src.application.dtos.LLM import LLMRequestDTO, LLMResponseDTO
+from src.application.dtos.error import LLMErrorDTO
 
 class LLMService:
     async def analyze(self, request: LLMRequestDTO) -> LLMResponseDTO:

@@ -1,7 +1,7 @@
 # domain/ports/llm_service_port.py
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from dtos.LLM import LLMResponseDTO, LLMRequestDTO
+from src.application.dtos.LLM import LLMResponseDTO, LLMRequestDTO
 
 class LLMServicePort(ABC):
     """Port/Interface for LLM services"""

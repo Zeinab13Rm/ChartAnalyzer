@@ -1,8 +1,8 @@
 # application/services/analysis_service.py
-from application.ports.analyze_service import AnalysisServicePort
-from application.dtos.analysis import AnalysisRequestDTO, AnalysisResponseDTO
+from src.application.ports.analyze_service import AnalysisServicePort
+from src.application.dtos.analysis import AnalysisRequestDTO, AnalysisResponseDTO
 # from domain.ports.image_processor import IImageProcessor  # Domain interface
-from application.ports.llm_service_port import LLMServicePort  # Domain interface
+from src.application.ports.llm_service_port import LLMServicePort  # Domain interface
 import uuid
 
 class AnalyzeService(AnalysisServicePort):

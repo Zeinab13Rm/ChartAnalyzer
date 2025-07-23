@@ -1,6 +1,6 @@
 # application/ports/analysis_service_port.py
 from abc import ABC, abstractmethod
-from application.dtos.analysis import AnalysisRequestDTO, AnalysisResponseDTO
+from src.application.dtos.analysis import AnalysisRequestDTO, AnalysisResponseDTO
 
 class AnalysisServicePort(ABC):
     """Port/Interface for the analysis service"""

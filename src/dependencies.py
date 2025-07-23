@@ -8,7 +8,9 @@ from src.domain.ports.repositories.user_repository import UserRepositoryPort
 from src.domain.ports.repositories.charts_repository import ChartsRepositoryPort
 from src.infrastructure.adapters.sqlserver.sql_user_repository import SqlUserRepository
 from src.infrastructure.adapters.sqlserver.sql_charts_repository import SqlChartsRepository
-from application.services.analyze_service import AnalyzeService
+from src.application.services.analyze_service import AnalyzeService
+from src.application.services.llm_service import LLMService
+from src.application.ports.llm_service_port import LLMServicePort
 # from infrastructure.services.llm.openai_service import OpenAIService  # Concrete LLM impl
 # from infrastructure.services.image.pillow_service import PillowImageService  # Concrete impl
 from src.config import settings
@@ -44,6 +46,18 @@ def get_upload_use_case(charts_repo: ChartsRepositoryPort = Depends(get_charts_r
 
 def get_analysis_service() -> AnalyzeService:
     """Factory for the analysis service"""
-    llm_service = OpenAIService(api_key="your-api-key")
-    image_service = PillowImageService()
-    return AnalyzeService(llm_service, image_service)
+    llm_service = LLMService()
+    # image_service = PillowImageService()
+    return AnalyzeService(llm_service)
+
+
+def get_llm_service() -> LLMServicePort:
+    """Dependency injection factory for LLMService"""
+    
+    # Choose adapter based on config
+    # adapter = HuggingFaceAdapter(
+    #     api_key=os.getenv("HF_API_KEY"),
+    #     model_id="ahmed-masry/chartgemma"
+    # )
+    
+    return LLMService()
