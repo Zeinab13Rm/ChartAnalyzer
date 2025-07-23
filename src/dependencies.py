@@ -8,6 +8,9 @@ from src.domain.ports.repositories.user_repository import UserRepositoryPort
 from src.domain.ports.repositories.charts_repository import ChartsRepositoryPort
 from src.infrastructure.adapters.sqlserver.sql_user_repository import SqlUserRepository
 from src.infrastructure.adapters.sqlserver.sql_charts_repository import SqlChartsRepository
+from application.services.analyze_service import AnalyzeService
+# from infrastructure.services.llm.openai_service import OpenAIService  # Concrete LLM impl
+# from infrastructure.services.image.pillow_service import PillowImageService  # Concrete impl
 from src.config import settings
 
 engine = create_async_engine(settings.DATABASE_URL, echo=True)
@@ -36,3 +39,11 @@ def get_auth_service(
 
 def get_upload_use_case(charts_repo: ChartsRepositoryPort = Depends(get_charts_repository)) -> UploadChartUseCase:
     return UploadChartUseCase(charts_repo)
+
+
+
+def get_analysis_service() -> AnalyzeService:
+    """Factory for the analysis service"""
+    llm_service = OpenAIService(api_key="your-api-key")
+    image_service = PillowImageService()
+    return AnalyzeService(llm_service, image_service)
