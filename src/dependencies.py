@@ -14,6 +14,8 @@ from src.application.ports.llm_service_port import LLMServicePort
 # from infrastructure.services.llm.openai_service import OpenAIService  # Concrete LLM impl
 # from infrastructure.services.image.pillow_service import PillowImageService  # Concrete impl
 from src.config import settings
+from src.application.services.ollama_service import OllamaService
+
 
 engine = create_async_engine(settings.DATABASE_URL, echo=True)
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -21,6 +23,11 @@ AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=F
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         yield session
+
+
+
+def get_llm_service() -> LLMServicePort:
+    return OllamaService(host="http://172.25.1.141:11434")
 
 
 def get_user_repository(session: AsyncSession = Depends(get_db_session)) -> UserRepositoryPort:
@@ -50,14 +57,3 @@ def get_analysis_service() -> AnalyzeService:
     # image_service = PillowImageService()
     return AnalyzeService(llm_service)
 
-
-def get_llm_service() -> LLMServicePort:
-    """Dependency injection factory for LLMService"""
-    
-    # Choose adapter based on config
-    # adapter = HuggingFaceAdapter(
-    #     api_key=os.getenv("HF_API_KEY"),
-    #     model_id="ahmed-masry/chartgemma"
-    # )
-    
-    return LLMService()

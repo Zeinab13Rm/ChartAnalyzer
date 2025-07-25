@@ -7,7 +7,7 @@ class LLMServicePort(ABC):
     """Port/Interface for LLM services"""
     
     @abstractmethod
-    async def analyze_chart(self, request: LLMRequestDTO) -> LLMResponseDTO:
+    async def analyze(self, request: LLMRequestDTO) -> LLMResponseDTO:
         """
         Analyze a chart image with a given question
         

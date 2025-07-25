@@ -5,6 +5,7 @@ from src.application.dtos.analysis import AnalysisRequestDTO, AnalysisResponseDT
 from src.application.ports.llm_service_port import LLMServicePort  # Domain interface
 import uuid
 
+
 class AnalyzeService(AnalysisServicePort):
     """Concrete implementation of the analysis service"""
     
